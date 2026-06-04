@@ -51,7 +51,7 @@ def main():
 
     # 5. Costruisci grafo da user_relations
     relations = dfs["user_relations"]
-    bundle    = build_user_graph_from_relations(relations, user_labels)
+    bundle    = build_user_graph_from_relations(relations, user_labels, min_interactions=2,   max_edges=3_000_000)
     bundle.save(out / "bundle.pkl")
 
     # ── Summary ──

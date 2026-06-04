@@ -110,38 +110,69 @@ def build_user_graph_from_relations(
     *,
     weight_col: str = "interaction_count",
     sentiment_col: str = "sentiment_sum",
+    min_interactions: int = 2,
+    max_edges: int = 5_000_000,
     metadata: dict | None = None,
 ) -> RedditGraphBundle:
     """
-    Costruisce G_user direttamente da user_relations.csv.
-    source_author → target_author, weight = interaction_count.
+    Builds G_user directly from user_relations.csv.
+    Vectorised — no iterrows, safe on large datasets.
     """
-    logger.info("Building G_user from user_relations…")
-    G = nx.DiGraph()
+    logger.info("Filtering relations (min_interactions=%d)…", min_interactions)
 
-    for _, row in relations.iterrows():
-        src = str(row["source_author"])
-        tgt = str(row["target_author"])
-        if src == tgt:
-            continue
-        w = int(row.get(weight_col, 1))
-        s = float(row.get(sentiment_col, 0.0))
-        if G.has_edge(src, tgt):
-            G[src][tgt]["weight"]    += w
-            G[src][tgt]["sentiment"] += s
-        else:
-            G.add_edge(src, tgt, weight=w, sentiment=s)
+    # 1. Filter low-weight edges first (reduces RAM massively)
+    if weight_col in relations.columns:
+        rel = relations[relations[weight_col] >= min_interactions].copy()
+    else:
+        rel = relations.copy()
+        rel[weight_col] = 1
 
-    # Attacca ideology labels ai nodi
+    logger.info("Edges after min_interactions filter: %d", len(rel))
+
+    # 2. Remove self-loops
+    rel = rel[rel["source_author"] != rel["target_author"]]
+
+    # 3. Cap to max_edges (take highest-weight edges)
+    if len(rel) > max_edges:
+        logger.warning("Capping to top %d edges by weight", max_edges)
+        rel = rel.nlargest(max_edges, weight_col)
+
+    # 4. Build graph vectorially via from_pandas_edgelist
+    logger.info("Building DiGraph from %d edges…", len(rel))
+    
+    edge_attrs = [weight_col]
+    if sentiment_col in rel.columns:
+        edge_attrs.append(sentiment_col)
+
+    G = nx.from_pandas_edgelist(
+        rel,
+        source="source_author",
+        target="target_author",
+        edge_attr=edge_attrs,
+        create_using=nx.DiGraph(),
+    )
+
+    # Rename weight column to "weight" (networkx convention)
+    if weight_col != "weight":
+        nx.set_edge_attributes(
+            G,
+            {(u, v): d[weight_col] for u, v, d in G.edges(data=True)},
+            "weight",
+        )
+
+    # 5. Attach ideology labels
     label_map = dict(zip(user_labels["author"], user_labels["user_label"]))
     share_map = dict(zip(user_labels["author"], user_labels["political_share"]))
     nx.set_node_attributes(G, label_map, "ideology_label")
     nx.set_node_attributes(G, share_map, "political_share")
 
-    logger.info("G_user: %d nodes, %d edges", G.number_of_nodes(), G.number_of_edges())
+    logger.info(
+        "G_user: %d nodes, %d edges",
+        G.number_of_nodes(), G.number_of_edges(),
+    )
 
     return RedditGraphBundle(
         G_user=G,
-        G_bip=nx.Graph(),   # vuoto: non abbiamo commenti per costruirlo
+        G_bip=nx.Graph(),
         metadata=metadata or {},
     )

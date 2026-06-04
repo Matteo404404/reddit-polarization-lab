@@ -1,51 +1,81 @@
-# Subreddit → ideology mapping
-# (basato su Waller & Anderson 2021, Bail et al. 2018)
-
-left:
-  - politics
-  - progressive
-  - socialism
-  - liberal
-  - SandersForPresident
-  - EnoughTrumpSpam
-  - feminism
-  - environment
-  - climate
-  - Political_Revolution
+# Subreddit ideology map — calibrated on THIS dataset
+# Based on top subreddits actually present in submissions.csv
+# References: Waller & Anderson (2021), Bail et al. (2018)
 
 right:
+  - The_Donald           # strongly right, pro-Trump
   - Conservative
   - Republican
   - AskTrumpSupporters
-  - The_Donald
-  - Libertarian
+  - ConservativeNewsWeb  # present in dataset
+  - FreedomNewsPolitics  # present in dataset
+  - TheGreenArmy         # conservative politics
   - MensRights
-  - KotakuInAction
   - firearms
   - progun
 
+left:
+  - politics             # present in dataset — leans left in studies
+  - ChapoTrapHouse       # present in dataset — far left
+  - SandersForPresident
+  - progressive
+  - socialism
+  - Political_Revolution
+  - EnoughTrumpSpam
+  - feminism
+  - environment
+
 general:
-  - PoliticalDiscussion
-  - NeutralPolitics
-  - moderatepolitics
+  - unpopularopinion     # present in dataset — mixed political
   - worldnews
   - news
+  - betternews           # present in dataset
+  - AutoNewspaper        # present in dataset — news aggregator
+  - TheNewsFeed          # present in dataset
+  - PoliticalDiscussion
+  - NeutralPolitics
   - geopolitics
-  - worldpolitics
-  - centrist
+  - legaladvice          # present in dataset — semi-political
 
 non_political:
   - AskReddit
-  - todayilearned
+  - dankmemes
+  - memes
+  - PewdiepieSubmissions
+  - teenagers
+  - Showerthoughts
+  - aww
   - funny
-  - pics
+  - me_irl
   - gaming
-  - science
-  - technology
-  - movies
+  - gameofthrones
+  - FortNiteBR
+  - Animemes
+  - apexlegends
+  - Brawlstars
+  - pics
+  - marvelstudios
+  - videos
+  - MortalKombat
+  - thedivision
+  - HistoryMemes
+  - cats
+  - Minecraft
+  - buildapc
+  - mildlyinteresting
+  - mildlyinfuriating
+  - relationship_advice
+  - nba
+  - leagueoflegends
+  - PrequelMemes
+  - Rainbow6
+  - DestinyTheGame
+  - pcmasterrace
   - Music
-  - books
-  - sports
-  - food
-  - DIY
-  - personalfinance
+  - trees
+  - Jokes
+  - freefolk
+  - AmItheAsshole
+  - NoStupidQuestions
+  - unpopularopinion     # also in general — pick one
+  - softwaregore

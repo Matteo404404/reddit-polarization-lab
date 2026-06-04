@@ -1,0 +1,51 @@
+# Subreddit → ideology mapping
+# (basato su Waller & Anderson 2021, Bail et al. 2018)
+
+left:
+  - politics
+  - progressive
+  - socialism
+  - liberal
+  - SandersForPresident
+  - EnoughTrumpSpam
+  - feminism
+  - environment
+  - climate
+  - Political_Revolution
+
+right:
+  - Conservative
+  - Republican
+  - AskTrumpSupporters
+  - The_Donald
+  - Libertarian
+  - MensRights
+  - KotakuInAction
+  - firearms
+  - progun
+
+general:
+  - PoliticalDiscussion
+  - NeutralPolitics
+  - moderatepolitics
+  - worldnews
+  - news
+  - geopolitics
+  - worldpolitics
+  - centrist
+
+non_political:
+  - AskReddit
+  - todayilearned
+  - funny
+  - pics
+  - gaming
+  - science
+  - technology
+  - movies
+  - Music
+  - books
+  - sports
+  - food
+  - DIY
+  - personalfinance
